@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voltes V Legacy — Global Landed Cost & Community Campaign Planner</title>
+
+<style>
+:root {
+    --bg-dark: #07090e;
+    --bg-surface: #0e121a;
+    --bg-card: rgba(16, 22, 34, 0.88);
+    --bg-card-hover: rgba(22, 30, 48, 0.98);
+    --bg-elevated: #151d2c;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(0, 210, 255, 0.35);
+    
+    --volt-blue: #00d2ff;
+    --volt-blue-deep: #0077b6;
+    --volt-blue-glow: rgba(0, 210, 255, 0.25);
+    --volt-yellow: #ffb703;
+    --volt-yellow-glow: rgba(255, 183, 3, 0.22);
+    --volt-red: #ff3366;
+    --volt-green: #00f090;
+    --volt-green-dim: rgba(0, 240, 144, 0.12);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+
+    --shadow-card: 0 16px 36px -5px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.06);
+    --shadow-glow: 0 0 25px -3px var(--volt-blue-glow);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+    background-image: 
+        radial-gradient(circle at 15% 10%, rgba(0, 119, 182, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 85% 65%, rgba(0, 240, 144, 0.08) 0%, transparent 40%),
+        linear-gradient(180deg, #07090e 0%, #0b0f18 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 80px;
+    }
+}
+
+.container {
+    width: min(1220px, 94%);
+    margin: auto;
+}
+
+.hero {
+    position: relative;
+    padding: 24px 0 46px;
+    border-bottom: 1px solid var(--border-subtle);
+    overflow: hidden;
+}
+
+.hero::before {
+    content: "VOLTES";
+    position: absolute;
+    right: -20px;
+    top: -40px;
+    font-size: 260px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.012);
+    pointer-events: none;
+    font-family: sans-serif;
+    z-index: 0;
+    letter-spacing: -10px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap;
+}
+
+.partnership-badge {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo-block {
+    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border: 1px solid var(--border-subtle);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+}
+
+.logo-block img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+}
+
+.partnership-title h4 {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--volt-blue);
+    font-weight: 700;
+}
+
+.partnership-title span {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.topbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge-lead {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    background: rgba(0, 210, 255, 0.08);
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    border-radius: var(--radius-full);
+    color: var(--volt-blue);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(14, 20, 32, 0.9);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    padding: 3px;
+}
+
+.lang-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 13px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+    color: #ffffff;
+}
+
+.lang-btn.active {
+    background: var(--volt-blue);
+    color: #050811;
+    box-shadow: 0 0 10px var(--volt-blue-glow);
+}
+
+.hero-body {
+    position: relative;
+    z-index: 2;
+    margin-top: 30px;
+    max-width: 880px;
+}
+
+.tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 240, 144, 0.08);
+    border: 1px solid rgba(0, 240, 144, 0.3);
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--volt-green);
+    margin-bottom: 14px;
+}
+
+.tag-pill::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--volt-green);
+    box-shadow: 0 0 8px var(--volt-green);
+}
+
+h1 {
+    font-size: clamp(28px, 4.5vw, 46px);
+    line-height: 1.1;
+    letter-spacing: -1.2px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    max-width: 800px;
+}
+
+.collab-status-strip {
+    margin-top: 26px;
+    background: rgba(14, 20, 32, 0.8);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.collab-status-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.collab-status-left svg {
+    flex-shrink: 0;
+}
+
+.collab-status-text strong {
+    color: #ffffff;
+    font-size: 13px;
+    display: block;
+}
+
+.collab-status-text span {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.mobile-quick-nav {
+    display: none;
+    gap: 8px;
+    margin: 16px 0 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+.mobile-quick-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.quick-nav-pill {
+    background: rgba(14, 20, 32, 0.9);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.quick-nav-pill.highlight {
+    border-color: rgba(0, 210, 255, 0.4);
+    color: var(--volt-blue);
+    background: rgba(0, 210, 255, 0.08);
+}
+
+.section-title-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 36px 0 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.section-title-wrap h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.section-title-wrap p {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    border-color: rgba(0, 210, 255, 0.4);
+    box-shadow: var(--shadow-card), 0 0 25px rgba(0, 210, 255, 0.1);
+}
+
+.product-media {
+    height: 420px;
+    position: relative;
+    background: 
+        radial-gradient(circle at 50% 30%, rgba(0, 210, 255, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 50% 90%, rgba(0, 0, 0, 0.9) 0%, transparent 70%),
+        linear-gradient(180deg, #131b2a 0%, #090e18 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 24px 20px 16px;
+    overflow: hidden;
+}
+
+.product-media img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.85));
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .product-media img {
+    transform: scale(1.025);
+}
+
+.product-qty-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(8, 12, 18, 0.92);
+    border: 1px solid rgba(255, 183, 3, 0.45);
+    backdrop-filter: blur(10px);
+    padding: 6px 13px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--volt-yellow);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 3;
+}
+
+.product-details {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.series-badge {
+    align-self: flex-start;
+    background: rgba(0, 210, 255, 0.12);
+    color: var(--volt-blue);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+}
+
+.product-details h3 {
+    font-size: 21px;
+    font-weight: 700;
+    margin: 10px 0 4px;
+    color: #ffffff;
+}
+
+.product-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.specs-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 14px 0;
+}
+
+.spec-tag {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    padding: 5px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: #cbd5e1;
+}
+
+.product-price-strip {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-box span {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.price-box strong {
+    font-size: 19px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.sim-panel {
+    margin-top: 36px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-card);
+}
+
+.sim-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 24px;
+}
+
+.sim-panel-header h3 {
+    font-size: 21px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.destination-selector-strip {
+    background: rgba(14, 20, 32, 0.9);
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.destination-info h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.destination-info p {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.region-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.region-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 7px 13px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.region-btn:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.region-btn.active {
+    background: var(--volt-blue);
+    color: #050811;
+    border-color: var(--volt-blue);
+    font-weight: 700;
+    box-shadow: 0 0 12px var(--volt-blue-glow);
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.control-card {
+    background: rgba(14, 20, 32, 0.6);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    position: relative;
+}
+
+.control-card label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.control-card .val-badge {
+    color: var(--volt-blue);
+    font-weight: 700;
+    font-size: 14px;
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: #1c2638;
+    border-radius: var(--radius-full);
+    outline: none;
+    accent-color: var(--volt-blue);
+    cursor: pointer;
+    margin: 8px 0;
+}
+
+.range-marks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.input-with-affix {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-affix span {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.input-with-affix input {
+    width: 100%;
+    background: #080c14;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 8px 12px 8px 30px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.input-with-affix input:focus {
+    border-color: var(--volt-blue);
+}
+
+.results-dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.result-item-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.result-item-header {
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.result-item-header h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.result-data-rows {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+}
+
+.data-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.data-row.highlight-row {
+    background: rgba(0, 210, 255, 0.08);
+    padding: 9px 12px;
+    border-radius: 6px;
+    border-bottom: none;
+}
+
+.data-row strong {
+    font-weight: 700;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+}
+
+.positive-val {
+    color: var(--volt-green) !important;
+}
+
+.synergy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.synergy-card {
+    background: rgba(14, 18, 28, 0.85);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 20px;
+}
+
+.synergy-card.seller {
+    border-top: 4px solid var(--volt-yellow);
+}
+
+.synergy-card.community {
+    border-top: 4px solid var(--volt-blue);
+}
+
+.synergy-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.synergy-card-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.synergy-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+}
+
+.synergy-card.seller .synergy-tag {
+    background: var(--volt-yellow-glow);
+    color: var(--volt-yellow);
+}
+
+.synergy-card.community .synergy-tag {
+    background: rgba(0, 210, 255, 0.15);
+    color: var(--volt-blue);
+}
+
+.synergy-points-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.synergy-points-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.synergy-points-list svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.campaign-card {
+    margin-top: 28px;
+    background: linear-gradient(135deg, #0f1523 0%, #080b12 100%);
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    position: relative;
+    overflow: hidden;
+}
+
+.campaign-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.campaign-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.campaign-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.campaign-metric {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    min-width: 0;
+}
+
+.campaign-metric .m-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.campaign-metric .m-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+}
+
+.negotiation-bar {
+    margin-top: 24px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.negotiation-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.negotiation-text strong {
+    color: #ffffff;
+}
+
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--volt-blue), #0077b6);
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    box-shadow: 0 0 16px var(--volt-blue-glow);
+    transform: translateY(-1px);
+}
+
+.toast-msg {
+    display: none;
+    font-size: 12px;
+    color: var(--volt-green);
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+.mobile-sticky-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(7, 10, 16, 0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(0, 210, 255, 0.3);
+    padding: 10px 14px;
+    box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sticky-metric-group {
+    display: flex;
+    flex-direction: column;
+}
+.sticky-metric-sub {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    line-height: 1;
+}
+.sticky-metric-main {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--volt-blue);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+}
+.sticky-action-btn {
+    background: linear-gradient(135deg, var(--volt-blue), #0077b6);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 9px 14px;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+footer {
+    border-top: 1px solid var(--border-subtle);
+    padding: 40px 0 60px;
+    margin-top: 60px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+footer img {
+    height: 38px;
+    opacity: 0.6;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 992px) {
+    .products-grid,
+    .synergy-grid,
+    .results-dual-grid {
+        grid-template-columns: 1fr;
+    }
+    .campaign-metrics-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .hero {
+        padding: 18px 0 30px;
+    }
+    h1 {
+        font-size: 26px;
+    }
+    .mobile-quick-nav {
+        display: flex;
+    }
+    .mobile-sticky-bar {
+        display: flex;
+    }
+    .product-media {
+        height: 280px;
+        padding: 14px;
+    }
+    .campaign-metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .sim-panel {
+        padding: 18px 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="hero">
+    <div class="container">
+        <div class="topbar">
+            <div class="partnership-badge">
+                <div class="logo-block">
+                    <img 
+                        src="https://campbigfalcon.com/wp-content/uploads/2025/05/CBF-Supply-Depot-Logo.png" 
+                        alt="Camp Big Falcon Supply Depot"
+                        onerror="this.style.display='none'"
+                    >
+                </div>
+                <div class="partnership-title">
+                    <h4>Camp Big Falcon × Global Community Lead</h4>
+                    <span id="txtHeaderSubtitle">Voltes V Legacy Stock Liquidation & Landed Cost Dashboard</span>
+                </div>
+            </div>
+
+            <div class="topbar-controls">
+                <div class="badge-lead">
+                    <span>⚡</span>
+                    <span id="txtLeadBadge">Adrian · Community Admin</span>
+                </div>
+
+                <div class="lang-switcher">
+                    <button type="button" class="lang-btn active" id="btnLangEn" onclick="setLanguage('en')">EN</button>
+                    <button type="button" class="lang-btn" id="btnLangEs" onclick="setLanguage('es')">ES</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-body">
+            <div class="tag-pill" id="txtHeroTag">
+                Official Stock Liquidation & Landed Cost Study
+            </div>
+            <h1 id="txtHeroTitle">Voltes V Legacy: Landed Cost & Collector Interest Planner</h1>
+            <p id="txtHeroDesc">
+                Collaborative framework designed to evaluate international freight routes, calculate all-inclusive delivered prices, and gauge direct purchasing intent across our verified worldwide collector network for the remaining 10 licensed statues.
+            </p>
+
+            <nav class="mobile-quick-nav" aria-label="Quick anchors">
+                <a href="#destinationSection" class="quick-nav-pill">
+                    <span>✈️</span>
+                    <span id="txtNavShipping">Freight Simulator</span>
+                </a>
+                <a href="#campaignBalanceSection" class="quick-nav-pill highlight">
+                    <span>📊</span>
+                    <span id="txtNavTotals">Landed Summary</span>
+                </a>
+                <a href="#inventorySectionAnchor" class="quick-nav-pill">
+                    <span>🤖</span>
+                    <span id="txtNavStatues">Statues</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="collab-status-strip">
+            <div class="collab-status-left">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--volt-blue)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                <div class="collab-status-text">
+                    <strong id="txtCollabStepTitle">Stage 1: Establishing Landed Cost Benchmarks</strong>
+                    <span id="txtCollabStepDesc">Determining freight options for North America, Latin America, and Europe before presenting to the community.</span>
+                </div>
+            </div>
+            <div class="live-pill" id="txtLiveStatus">Ready for Presentation</div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+    <section id="inventorySectionAnchor">
+        <div class="section-title-wrap">
+            <div>
+                <h2 id="txtInventoryTitle">Official Remaining Stock for Placement</h2>
+                <p id="txtInventorySub">Exact inventory lot from Camp Big Falcon Supply Depot (10 Masterpiece figures total)</p>
+            </div>
+        </div>
+
+        <div class="products-grid">
+            <!-- MS/01 (51 cm) -->
+            <article class="product-card">
+                <div class="product-media">
+                    <img 
+                        src="https://campbigfalcon.com/wp-content/uploads/2025/04/Camp-Big-Falcon-Voltes-V-Legacy-Masterpiece-MS-01-S0-2-800x800.jpg" 
+                        alt="Voltes V Legacy MS/01 51 cm"
+                        loading="lazy"
+                        onerror="this.src='https://placehold.co/800x800/121824/00d2ff?text=Voltes+V+MS-01+51cm'"
+                    >
+                    <div class="product-qty-badge" id="txtBadgeBigQty">4 Units Available</div>
+                </div>
+                <div class="product-details">
+                    <span class="series-badge" id="txtSeriesBig">Masterpiece Series · Premium Scale</span>
+                    <h3>Voltes V Legacy MS/01</h3>
+                    <div class="product-subtitle" id="txtSubBig">51 cm Licensed Polyresin Statue with LED Illumination</div>
+
+                    <div class="specs-tags">
+                        <span class="spec-tag" id="txtSpecBigHeight">Height: 51 cm</span>
+                        <span class="spec-tag" id="txtSpecBigWeight">Weight: 9.5 kg</span>
+                        <span class="spec-tag" id="txtSpecBigArms">Interchangeable Arms</span>
+                        <span class="spec-tag" id="txtSpecBigNumbered">Numbered COA</span>
+                    </div>
+
+                    <div class="product-price-strip">
+                        <div class="price-box">
+                            <span id="txtCatalogMSRP1">Official Catalog MSRP (PH)</span>
+                            <strong>₱89,990 PHP</strong>
+                        </div>
+                        <div class="price-box" style="text-align:right;">
+                            <span id="txtCatalogUsd1">Base Catalog Value</span>
+                            <strong id="displayBigRefUsd" style="color:var(--volt-blue);">$1,436 USD</strong>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- MMS/01 (20 cm) -->
+            <article class="product-card">
+                <div class="product-media">
+                    <img 
+                        src="https://campbigfalcon.com/wp-content/uploads/2025/04/Camp-Big-Falcon-Voltes-V-Legacy-Masterpiece-MS-01-P1-1-800x800.jpg" 
+                        alt="Voltes V Legacy MMS/01 20 cm"
+                        loading="lazy"
+                        onerror="this.src='https://placehold.co/800x800/121824/00d2ff?text=Voltes+V+MMS-01+20cm'"
+                    >
+                    <div class="product-qty-badge" id="txtBadgeSmallQty">6 Units Available</div>
+                </div>
+                <div class="product-details">
+                    <span class="series-badge" id="txtSeriesSmall">Mini Masterpiece Series</span>
+                    <h3>Voltes V Legacy MMS/01</h3>
+                    <div class="product-subtitle" id="txtSubSmall">20 cm Licensed Polyresin Statue for Collectors</div>
+
+                    <div class="specs-tags">
+                        <span class="spec-tag" id="txtSpecSmallHeight">Height: 20 cm</span>
+                        <span class="spec-tag" id="txtSpecSmallWeight">Weight: 0.8 kg</span>
+                        <span class="spec-tag" id="txtSpecSmallResin">Solid Polyresin</span>
+                        <span class="spec-tag" id="txtSpecSmallBox">Collector Box</span>
+                    </div>
+
+                    <div class="product-price-strip">
+                        <div class="price-box">
+                            <span id="txtCatalogMSRP2">Official Catalog MSRP (PH)</span>
+                            <strong>₱19,500 PHP</strong>
+                        </div>
+                        <div class="price-box" style="text-align:right;">
+                            <span id="txtCatalogUsd2">Base Catalog Value</span>
+                            <strong id="displaySmallRefUsd" style="color:var(--volt-blue);">$311 USD</strong>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="sim-panel" id="destinationSection">
+        <div class="sim-panel-header">
+            <div>
+                <h3 id="txtSimHeaderTitle">Destination Route & Landed Cost Simulator</h3>
+                <p style="font-size:13px; color:var(--text-secondary); margin-top:3px;" id="txtSimHeaderSub">
+                    Model freight quotes, regional duties, and campaign incentives to reach a competitive delivered price.
+                </p>
+            </div>
+            <div class="live-pill" style="background:rgba(0,210,255,0.1); border-color:var(--volt-blue); color:var(--volt-blue);">
+                DHL / FedEx Ready
+            </div>
+        </div>
+
+        <!-- REGION SELECTOR PRESETS -->
+        <div class="destination-selector-strip">
+            <div class="destination-info">
+                <h4 id="txtPresetHeading">Target Destination Preset:</h4>
+                <p id="txtPresetSub">Select a regional market to populate average freight and import duty benchmarks.</p>
+            </div>
+            <div class="region-buttons">
+                <button type="button" class="region-btn active" id="btnRegUS" onclick="applyRegionPreset('US')">North America (USA/CA)</button>
+                <button type="button" class="region-btn" id="btnRegLATAM" onclick="applyRegionPreset('LATAM')">Latin America (MX/CL/PE)</button>
+                <button type="button" class="region-btn" id="btnRegEU" onclick="applyRegionPreset('EU')">Europe (UK/EU)</button>
+                <button type="button" class="region-btn" id="btnRegASIA" onclick="applyRegionPreset('ASIA')">Southeast Asia / Local</button>
+            </div>
+        </div>
+
+        <div class="controls-grid">
+            <!-- Base Seller Subsidy / Special Campaign Price -->
+            <div class="control-card">
+                <label>
+                    <span id="txtSellerIncentiveLabel">Seller Campaign Incentive / Discount</span>
+                    <span class="val-badge" id="sellerDiscountVal">10.0%</span>
+                </label>
+                <input type="range" id="sellerDiscount" min="0" max="25" step="1" value="10">
+                <div class="range-marks">
+                    <span>0% (Full MSRP)</span>
+                    <span>10%</span>
+                    <span>25%</span>
+                </div>
+            </div>
+
+            <!-- Estimated Freight MS/01 (51 cm) -->
+            <div class="control-card">
+                <label id="txtShipBigLabel">Est. Air Freight MS/01 (51 cm / 9.5 kg)</label>
+                <div class="input-with-affix">
+                    <span>$</span>
+                    <input type="number" id="shipBig" value="280" min="0" step="10">
+                </div>
+            </div>
+
+            <!-- Estimated Freight MMS/01 (20 cm) -->
+            <div class="control-card">
+                <label id="txtShipSmallLabel">Est. Air Freight MMS/01 (20 cm / 0.8 kg)</label>
+                <div class="input-with-affix">
+                    <span>$</span>
+                    <input type="number" id="shipSmall" value="85" min="0" step="5">
+                </div>
+            </div>
+
+            <!-- Estimated Import Tariff / Buffer -->
+            <div class="control-card">
+                <label>
+                    <span id="txtTariffLabel">Estimated Duty & Clearance (%)</span>
+                    <span class="val-badge" id="tariffVal">8.0%</span>
+                </label>
+                <input type="range" id="tariffRate" min="0" max="25" step="0.5" value="8">
+                <div class="range-marks">
+                    <span>0%</span>
+                    <span>8%</span>
+                    <span>25%</span>
+                </div>
+            </div>
+
+            <!-- Exchange Rate -->
+            <div class="control-card">
+                <label id="txtExchangeLabel">Exchange Rate (PHP per 1 USD)</label>
+                <div class="input-with-affix">
+                    <span>₱</span>
+                    <input type="number" id="exchange" value="62.65" min="1" step="0.05">
+                </div>
+            </div>
+
+            <!-- Community Campaign Success Fee -->
+            <div class="control-card">
+                <label>
+                    <span id="txtFacilitationLabel">Community Facilitation / Marketing Fee</span>
+                    <span class="val-badge" id="feePercentVal">10.0%</span>
+                </label>
+                <input type="range" id="feePercent" min="5" max="20" step="1" value="10">
+                <div class="range-marks">
+                    <span>5%</span>
+                    <span>10%</span>
+                    <span>20%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-dual-grid">
+            <!-- MS/01 (51 cm) -->
+            <div class="result-item-card">
+                <div class="result-item-header">
+                    <div>
+                        <h4>Voltes V Legacy MS/01 (51 cm)</h4>
+                        <span id="txtHeaderBigSub">Masterpiece Statue · 4 units available</span>
+                    </div>
+                    <span class="badge-pill" style="background:#1e293b; color:var(--volt-blue);">x4 Units</span>
+                </div>
+                <div class="result-data-rows">
+                    <div class="data-row">
+                        <span id="txtRowCatalogBase1">Official Base Value (MSRP)</span>
+                        <strong id="bigBaseUsd">$1,436</strong>
+                    </div>
+                    <div class="data-row">
+                        <span id="txtRowExWarehouse1">Ex-Warehouse Offer Price</span>
+                        <strong id="bigExWarehouse">$1,293</strong>
+                    </div>
+                    <div class="data-row">
+                        <span id="txtRowShipping1">International Freight Quote</span>
+                        <strong id="bigShippingDisplay">$280</strong>
+                    </div>
+                    <div class="data-row">
+                        <span id="txtRowDuty1">Estimated Customs & Clearance</span>
+                        <strong id="bigDutyDisplay">$103</strong>
+                    </div>
+                    <div class="data-row highlight-row">
+                        <span style="color:#ffffff; font-weight:700;" id="txtRowLanded1">Target Landed Delivered Price</span>
+                        <strong id="bigLandedPrice" style="color:var(--volt-blue); font-size:16px;">$1,676 USD</strong>
+                    </div>
+                    <div class="data-row">
+                        <span id="txtRowSellerNet1">Net Inflow to Seller per Piece</span>
+                        <strong id="bigSellerNet" class="positive-val">$1,164 USD</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MMS/01 (20 cm) -->
+            <div class="result-item-card">
+                <div class="result-item-header">
+                    <div>
+                        <h4>Voltes V Legacy MMS/01 (20 cm)</h4>
+                        <span id="txtHeaderSmallSub">Mini Masterpiece · 6 units available</span>
+                    </div>
+                    <span class="badge-pill" style="background:#1e293b; color:var(--volt-blue);">x6 Units</span>
+                </div>
+                <div class="result-data-rows">
+                    <div class="data-row">
+                        <span id="txtRowCatalogBase2">Official Base Value (MSRP)</span>
+                        <strong id="smallBaseUsd">$311</strong>
+                    </div>
+                    <div class="data-row">
+                        <span id="txtRowExWarehouse2">Ex-Warehouse Offer Price</span>
+                        <strong id="smallExWarehouse">$280</strong>
+                    </div>
+                    <div class="data-row">
+                        <span id="txtRowShipping2">International Freight Quote</span>
+                        <strong id="smallShippingDisplay">$85</strong>
+                    </div>
+                    <div class="data-row">
+                        <span id="txtRowDuty2">Estimated Customs & Clearance</span>
+                        <strong id="smallDutyDisplay">$22</strong>
+                    </div>
+                    <div class="data-row highlight-row">
+                        <span style="color:#ffffff; font-weight:700;" id="txtRowLanded2">Target Landed Delivered Price</span>
+                        <strong id="smallLandedPrice" style="color:var(--volt-blue); font-size:16px;">$387 USD</strong>
+                    </div>
+                    <div class="data-row">
+                        <span id="txtRowSellerNet2">Net Inflow to Seller per Piece</span>
+                        <strong id="smallSellerNet" class="positive-val">$252 USD</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="synergy-grid">
+            <div class="synergy-card seller">
+                <div class="synergy-card-header">
+                    <h3 id="txtSynergySellerHeader">Camp Big Falcon Supply Depot (Inventory Partner)</h3>
+                    <span class="synergy-tag" id="txtSynergySellerTag">Fulfillment & Stock</span>
+                </div>
+                <ul class="synergy-points-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--volt-green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span id="txtSynergySeller1">Direct customer invoicing, order authentication, and official dispatch.</span>
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--volt-green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span id="txtSynergySeller2">Export packaging and handover to DHL/FedEx for seamless tracking.</span>
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--volt-green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span id="txtSynergySeller3">Guaranteed clean liquidation of all 10 remaining units without advertising overhead.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="synergy-card community">
+                <div class="synergy-card-header">
+                    <h3 id="txtSynergyCommunityHeader">Adrian & Collector Community (Campaign Partner)</h3>
+                    <span class="synergy-tag" id="txtSynergyCommunityTag">Audience & Placement</span>
+                </div>
+                <ul class="synergy-points-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--volt-blue)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span id="txtSynergyComm1">Direct presentation to verified, passionate high-ticket Voltes V collectors.</span>
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--volt-blue)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span id="txtSynergyComm2">Pre-qualifying serious buyers ready to transact at confirmed landed pricing.</span>
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--volt-blue)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span id="txtSynergyComm3">Performance-based campaign: zero upfront fees, compensation purely on closed sales.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="campaign-card" id="campaignBalanceSection">
+            <div class="campaign-header">
+                <div>
+                    <h3 id="txtCampaignTitle">Comprehensive Campaign Financial Recap (All 10 Statues)</h3>
+                    <p style="color:var(--text-secondary); font-size:13px; margin-top:2px;" id="txtCampaignSub">
+                        Projected cashflow once all 4 MS/01 and 6 MMS/01 statues are placed with collectors
+                    </p>
+                </div>
+                <div class="live-pill" style="background:rgba(0,240,144,0.1); border-color:var(--volt-green); color:var(--volt-green);">
+                    100% Stock Liquidation
+                </div>
+            </div>
+
+            <div class="campaign-metrics-grid">
+                <div class="campaign-metric">
+                    <span class="m-label" id="txtMetricDeliveredVolume">Total Landed Order Volume</span>
+                    <div class="m-value" id="metricDeliveredTotal">$9,028</div>
+                </div>
+
+                <div class="campaign-metric">
+                    <span class="m-label" id="txtMetricLogistics">Total Freight & Duties</span>
+                    <div class="m-value" id="metricLogisticsTotal">$2,176</div>
+                </div>
+
+                <div class="campaign-metric">
+                    <span class="m-label" id="txtMetricSellerNet">Net Liquidation to Seller</span>
+                    <div class="m-value positive-val" id="metricSellerNetTotal">$6,168</div>
+                </div>
+
+                <div class="campaign-metric">
+                    <span class="m-label" id="txtMetricCommunityPool">Community Facilitation Pool</span>
+                    <div class="m-value" id="metricFacilitationTotal" style="color:var(--volt-blue);">$684</div>
+                </div>
+            </div>
+
+            <div class="negotiation-bar">
+                <div class="negotiation-text">
+                    <strong id="txtMemoNoticeTitle">Ready to share this plan with the seller?</strong> 
+                    <span id="txtMemoNoticeSub">Generate a clear, professional memorandum to follow up on your shipping discussion.</span>
+                </div>
+                <div>
+                    <button type="button" class="copy-btn" onclick="copyCollaborativeMemo()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <span id="txtCopyMemoBtn">Copy Discussion Summary for WhatsApp/Email</span>
+                    </button>
+                    <span class="toast-msg" id="toastCopy">Summary copied to clipboard!</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<aside class="mobile-sticky-bar" id="mobileStickyBar">
+    <div class="sticky-metric-group">
+        <span class="sticky-metric-sub" id="txtStickySub">Target Landed (Big/Small)</span>
+        <div class="sticky-metric-main">
+            <span id="stickyLandedDisplay">$1,676 / $387</span>
+        </div>
+    </div>
+    <a href="#campaignBalanceSection" class="sticky-action-btn">
+        <span id="txtStickyAction">View Recap</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
+</aside>
+
+<footer>
+    <div class="container">
+        <a href="https://campbigfalcon.com/" target="_blank" rel="noopener">
+            <img 
+                src="https://campbigfalcon.com/wp-content/uploads/2025/05/CBF-Supply-Depot-Logo.png" 
+                alt="CBF Supply Depot"
+                onerror="this.style.display='none'"
+            >
+        </a>
+        <p id="txtFooter1">Joint planning tool between Camp Big Falcon Supply Depot and the Official Voltes V Collector Community.</p>
+        <p style="margin-top:6px; color:#475569;" id="txtFooter2">Official Voltes V Legacy trademarks and licensed designs belong to their respective rights holders.</p>
+    </div>
+</footer>
+
+<textarea id="clipboardBuffer" style="position:absolute; left:-9999px; top:-9999px;"></textarea>
+
+<script>
+const BIG_REF_PHP = 89990;    // MS/01 (51 cm)
+const SMALL_REF_PHP = 19500;  // MMS/01 (20 cm)
+
+const QTY_BIG = 4;
+const QTY_SMALL = 6;
+
+let currentLang = 'en';
+let activeRegion = 'US';
+
+const REGION_PRESETS = {
+    US: { shipBig: 280, shipSmall: 85, tariff: 8 },
+    LATAM: { shipBig: 340, shipSmall: 110, tariff: 16 },
+    EU: { shipBig: 310, shipSmall: 95, tariff: 19 },
+    ASIA: { shipBig: 120, shipSmall: 45, tariff: 0 }
+};
+
+const I18N = {
+    en: {
+        headerSubtitle: "Voltes V Legacy Stock Liquidation & Landed Cost Dashboard",
+        leadBadge: "Adrian · Community Admin",
+        heroTag: "Official Stock Liquidation & Landed Cost Study",
+        heroTitle: "Voltes V Legacy: Landed Cost & Collector Interest Planner",
+        heroDesc: "Collaborative framework designed to evaluate international freight routes, calculate all-inclusive delivered prices, and gauge direct purchasing intent across our verified worldwide collector network for the remaining 10 licensed statues.",
+        navShipping: "Freight Simulator",
+        navTotals: "Landed Summary",
+        navStatues: "Statues",
+        collabStepTitle: "Stage 1: Establishing Landed Cost Benchmarks",
+        collabStepDesc: "Determining freight options for North America, Latin America, and Europe before presenting to the community.",
+        liveStatus: "Ready for Presentation",
+        inventoryTitle: "Official Remaining Stock for Placement",
+        inventorySub: "Exact inventory lot from Camp Big Falcon Supply Depot (10 Masterpiece figures total)",
+        badgeBigQty: "4 Units Available",
+        seriesBig: "Masterpiece Series · Premium Scale",
+        subBig: "51 cm Licensed Polyresin Statue with LED Illumination",
+        specBigHeight: "Height: 51 cm",
+        specBigWeight: "Weight: 9.5 kg",
+        specBigArms: "Interchangeable Arms",
+        specBigNumbered: "Numbered COA",
+        badgeSmallQty: "6 Units Available",
+        seriesSmall: "Mini Masterpiece Series",
+        subSmall: "20 cm Licensed Polyresin Statue for Collectors",
+        specSmallHeight: "Height: 20 cm",
+        specSmallWeight: "Weight: 0.8 kg",
+        specSmallResin: "Solid Polyresin",
+        specSmallBox: "Collector Box",
+        catalogMSRP: "Official Catalog MSRP (PH)",
+        catalogUsd: "Base Catalog Value",
+        simHeaderTitle: "Destination Route & Landed Cost Simulator",
+        simHeaderSub: "Model freight quotes, regional duties, and campaign incentives to reach a competitive delivered price.",
+        presetHeading: "Target Destination Preset:",
+        presetSub: "Select a regional market to populate average freight and import duty benchmarks.",
+        sellerIncentiveLabel: "Seller Campaign Incentive / Discount",
+        shipBigLabel: "Est. Air Freight MS/01 (51 cm / 9.5 kg)",
+        shipSmallLabel: "Est. Air Freight MMS/01 (20 cm / 0.8 kg)",
+        tariffLabel: "Estimated Duty & Clearance (%)",
+        exchangeLabel: "Exchange Rate (PHP per 1 USD)",
+        facilitationLabel: "Community Facilitation / Marketing Fee",
+        headerBigSub: "Masterpiece Statue · 4 units available",
+        headerSmallSub: "Mini Masterpiece · 6 units available",
+        rowCatalogBase: "Official Base Value (MSRP)",
+        rowExWarehouse: "Ex-Warehouse Offer Price",
+        rowShipping: "International Freight Quote",
+        rowDuty: "Estimated Customs & Clearance",
+        rowLanded: "Target Landed Delivered Price",
+        rowSellerNet: "Net Inflow to Seller per Piece",
+        synergySellerHeader: "Camp Big Falcon Supply Depot (Inventory Partner)",
+        synergySellerTag: "Fulfillment & Stock",
+        synergySeller1: "Direct customer invoicing, order authentication, and official dispatch.",
+        synergySeller2: "Export packaging and handover to DHL/FedEx for seamless tracking.",
+        synergySeller3: "Guaranteed clean liquidation of all 10 remaining units without advertising overhead.",
+        synergyCommunityHeader: "Adrian & Collector Community (Campaign Partner)",
+        synergyCommunityTag: "Audience & Placement",
+        synergyComm1: "Direct presentation to verified, passionate high-ticket Voltes V collectors.",
+        synergyComm2: "Pre-qualifying serious buyers ready to transact at confirmed landed pricing.",
+        synergyComm3: "Performance-based campaign: zero upfront fees, compensation purely on closed sales.",
+        campaignTitle: "Comprehensive Campaign Financial Recap (All 10 Statues)",
+        campaignSub: "Projected cashflow once all 4 MS/01 and 6 MMS/01 statues are placed with collectors",
+        metricDeliveredVolume: "Total Landed Order Volume",
+        metricLogistics: "Total Freight & Duties",
+        metricSellerNet: "Net Liquidation to Seller",
+        metricCommunityPool: "Community Facilitation Pool",
+        memoNoticeTitle: "Ready to share this plan with the seller?",
+        memoNoticeSub: "Generate a clear, professional memorandum to follow up on your shipping discussion.",
+        copyMemoBtn: "Copy Discussion Summary for WhatsApp/Email",
+        toastCopied: "Summary copied to clipboard!",
+        stickySub: "Target Landed (Big/Small)",
+        stickyAction: "View Recap",
+        footer1: "Joint planning tool between Camp Big Falcon Supply Depot and the Official Voltes V Collector Community.",
+        footer2: "Official Voltes V Legacy trademarks and licensed designs belong to their respective rights holders."
+    },
+    es: {
+        headerSubtitle: "Panel de Liquidación de Stock & Costo Puesto en Destino (Landed)",
+        leadBadge: "Adrian · Admin de la Comunidad",
+        heroTag: "Estudio Oficial de Liquidación & Desembarco Logístico",
+        heroTitle: "Voltes V Legacy: Simulador de Costo Landed & Campaña",
+        heroDesc: "Marco de trabajo colaborativo para evaluar rutas de flete internacional, calcular el precio final entregado en destino y medir el interés de compra de nuestra red mundial de coleccionistas para las 10 estatuas oficiales restantes.",
+        navShipping: "Simulador de Fletes",
+        navTotals: "Resumen Landed",
+        navStatues: "Estatuas",
+        collabStepTitle: "Etapa 1: Establecer Parámetros de Costo Puesto en Destino",
+        collabStepDesc: "Determinando opciones de flete para Norteamérica, Latinoamérica y Europa antes de abrir la campaña.",
+        liveStatus: "Listo para Presentar",
+        inventoryTitle: "Inventario Oficial Remanente",
+        inventorySub: "Lote exacto disponible en Camp Big Falcon Supply Depot (10 estatuas Masterpiece en total)",
+        badgeBigQty: "4 Unidades Disponibles",
+        seriesBig: "Masterpiece Series · Escala Premium",
+        subBig: "Estatua de Poliresina de 51 cm con Iluminación LED",
+        specBigHeight: "Altura: 51 cm",
+        specBigWeight: "Peso: 9.5 kg",
+        specBigArms: "Brazos Intercambiables",
+        specBigNumbered: "Certificado Numerado",
+        badgeSmallQty: "6 Unidades Disponibles",
+        seriesSmall: "Mini Masterpiece Series",
+        subSmall: "Estatua de Poliresina de 20 cm para Coleccionistas",
+        specSmallHeight: "Altura: 20 cm",
+        specSmallWeight: "Peso: 0.8 kg",
+        specSmallResin: "Poliresina Rígida",
+        specSmallBox: "Caja de Coleccionista",
+        catalogMSRP: "PVP Oficial Catálogo (PH)",
+        catalogUsd: "Valor Base de Catálogo",
+        simHeaderTitle: "Simulador de Fletes & Costo Puesto en Destino",
+        simHeaderSub: "Modela cotizaciones de mensajería, aranceles regionales e incentivos para fijar un precio competitivo.",
+        presetHeading: "Ruta de Destino Predeterminada:",
+        presetSub: "Selecciona un mercado regional para cargar promedios de flete e impuestos de aduana.",
+        sellerIncentiveLabel: "Descuento / Incentivo de Campaña del Vendedor",
+        shipBigLabel: "Flete Aéreo Estimado MS/01 (51 cm / 9.5 kg)",
+        shipSmallLabel: "Flete Aéreo Estimado MMS/01 (20 cm / 0.8 kg)",
+        tariffLabel: "Aranceles e Importación Estimados (%)",
+        exchangeLabel: "Tipo de Cambio (PHP por 1 USD)",
+        facilitationLabel: "Fee de Facilitación / Marketing Comunitario",
+        headerBigSub: "Estatua Masterpiece · 4 unidades",
+        headerSmallSub: "Mini Masterpiece · 6 unidades",
+        rowCatalogBase: "Valor Oficial Base (Catálogo)",
+        rowExWarehouse: "Precio Oferta Salida de Almacén",
+        rowShipping: "Cotización de Flete Internacional",
+        rowDuty: "Aduanas e Importación Estimadas",
+        rowLanded: "Precio Objetivo Puesto en Destino (Landed)",
+        rowSellerNet: "Ingreso Neto al Vendedor por Pieza",
+        synergySellerHeader: "Camp Big Falcon Supply Depot (Inventario & Envíos)",
+        synergySellerTag: "Logística y Stock",
+        synergySeller1: "Facturación directa al comprador, certificación oficial y despacho.",
+        synergySeller2: "Embalaje de exportación y entrega a DHL/FedEx con tracking internacional.",
+        synergySeller3: "Liquidación total de las 10 piezas remanentes sin gastos publicitarios.",
+        synergyCommunityHeader: "Adrian & Comunidad Voltes V (Campaña & Audiencia)",
+        synergyCommunityTag: "Audiencia & Colocación",
+        synergyComm1: "Presentación directa a coleccionistas verificados de alto perfil de Voltes V.",
+        synergyComm2: "Precalificación de compradores listos para ordenar al confirmarse el costo landed.",
+        synergyComm3: "Campaña a éxito (Success Fee): sin costes fijos, honorarios solo por ventas cerradas.",
+        campaignTitle: "Resumen Financiero Consolidado de la Campaña (10 Figuras)",
+        campaignSub: "Flujo proyectado una vez colocadas las 4 estatuas MS/01 y las 6 MMS/01 entre los miembros",
+        metricDeliveredVolume: "Volumen Total Puesto en Destino",
+        metricLogistics: "Total Fletes y Aranceles",
+        metricSellerNet: "Neto Liquidado al Vendedor",
+        metricCommunityPool: "Fondo de Facilitación Comunitaria",
+        memoNoticeTitle: "¿Listo para compartir esta propuesta con el vendedor?",
+        memoNoticeSub: "Genera un memorando claro y formal para continuar la conversación sobre opciones de flete.",
+        copyMemoBtn: "Copiar Resumen para WhatsApp/Email",
+        toastCopied: "¡Resumen copiado al portapapeles!",
+        stickySub: "Target Landed (Grande/Chica)",
+        stickyAction: "Ver Resumen",
+        footer1: "Herramienta de planificación conjunta entre Camp Big Falcon Supply Depot y la Comunidad Oficial de Voltes V.",
+        footer2: "Marcas y diseños con licencia oficial de Voltes V Legacy pertenecen a sus respectivos titulares."
+    }
+};
+
+function getNum(id) {
+    const el = document.getElementById(id);
+    if (!el) return 0;
+    const val = parseFloat(el.value);
+    return Number.isFinite(val) && val >= 0 ? val : 0;
+}
+
+function formatMoney(amount) {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0
+    }).format(amount);
+}
+
+function applyRegionPreset(region) {
+    activeRegion = region;
+    ['US', 'LATAM', 'EU', 'ASIA'].forEach(r => {
+        const btn = document.getElementById('btnReg' + r);
+        if (btn) btn.classList.toggle('active', r === region);
+    });
+
+    const p = REGION_PRESETS[region];
+    if (p) {
+        document.getElementById('shipBig').value = p.shipBig;
+        document.getElementById('shipSmall').value = p.shipSmall;
+        document.getElementById('tariffRate').value = p.tariff;
+        updateCalculations();
+    }
+}
+
+function updateCalculations() {
+    const exchange = Math.max(getNum("exchange"), 0.01);
+    const msrpBigUsd = BIG_REF_PHP / exchange;
+    const msrpSmallUsd = SMALL_REF_PHP / exchange;
+
+    document.getElementById("displayBigRefUsd").textContent = formatMoney(msrpBigUsd) + " USD";
+    document.getElementById("displaySmallRefUsd").textContent = formatMoney(msrpSmallUsd) + " USD";
+    document.getElementById("bigBaseUsd").textContent = formatMoney(msrpBigUsd);
+    document.getElementById("smallBaseUsd").textContent = formatMoney(msrpSmallUsd);
+
+    const discountRate = getNum("sellerDiscount") / 100;
+    const tariffRate = getNum("tariffRate") / 100;
+    const feeRate = getNum("feePercent") / 100;
+
+    document.getElementById("sellerDiscountVal").textContent = (discountRate * 100).toFixed(1) + "%";
+    document.getElementById("tariffVal").textContent = (tariffRate * 100).toFixed(1) + "%";
+    document.getElementById("feePercentVal").textContent = (feeRate * 100).toFixed(1) + "%";
+
+    const exWarehouseBig = msrpBigUsd * (1 - discountRate);
+    const exWarehouseSmall = msrpSmallUsd * (1 - discountRate);
+
+    const shipBig = getNum("shipBig");
+    const shipSmall = getNum("shipSmall");
+
+    const dutyBig = exWarehouseBig * tariffRate;
+    const dutySmall = exWarehouseSmall * tariffRate;
+
+    const landedBig = exWarehouseBig + shipBig + dutyBig;
+    const landedSmall = exWarehouseSmall + shipSmall + dutySmall;
+
+    const facilitationCutBig = exWarehouseBig * feeRate;
+    const facilitationCutSmall = exWarehouseSmall * feeRate;
+
+    const sellerKeepsBig = exWarehouseBig - facilitationCutBig;
+    const sellerKeepsSmall = exWarehouseSmall - facilitationCutSmall;
+
+    document.getElementById("bigExWarehouse").textContent = formatMoney(exWarehouseBig);
+    document.getElementById("bigShippingDisplay").textContent = formatMoney(shipBig);
+    document.getElementById("bigDutyDisplay").textContent = formatMoney(dutyBig);
+    document.getElementById("bigLandedPrice").textContent = formatMoney(landedBig) + " USD";
+    document.getElementById("bigSellerNet").textContent = formatMoney(sellerKeepsBig) + " USD";
+
+    document.getElementById("smallExWarehouse").textContent = formatMoney(exWarehouseSmall);
+    document.getElementById("smallShippingDisplay").textContent = formatMoney(shipSmall);
+    document.getElementById("smallDutyDisplay").textContent = formatMoney(dutySmall);
+    document.getElementById("smallLandedPrice").textContent = formatMoney(landedSmall) + " USD";
+    document.getElementById("smallSellerNet").textContent = formatMoney(sellerKeepsSmall) + " USD";
+
+    const totalLandedVolume = (landedBig * QTY_BIG) + (landedSmall * QTY_SMALL);
+    const totalLogistics = ((shipBig + dutyBig) * QTY_BIG) + ((shipSmall + dutySmall) * QTY_SMALL);
+    const totalSellerNet = (sellerKeepsBig * QTY_BIG) + (sellerKeepsSmall * QTY_SMALL);
+    const totalFacilitation = (facilitationCutBig * QTY_BIG) + (facilitationCutSmall * QTY_SMALL);
+
+    document.getElementById("metricDeliveredTotal").textContent = formatMoney(totalLandedVolume);
+    document.getElementById("metricLogisticsTotal").textContent = formatMoney(totalLogistics);
+    document.getElementById("metricSellerNetTotal").textContent = formatMoney(totalSellerNet);
+    document.getElementById("metricFacilitationTotal").textContent = formatMoney(totalFacilitation);
+
+    const stickyDisplay = document.getElementById("stickyLandedDisplay");
+    if (stickyDisplay) {
+        stickyDisplay.textContent = `${formatMoney(landedBig)} / ${formatMoney(landedSmall)}`;
+    }
+}
+
+function setLanguage(lang) {
+    if (!I18N[lang]) return;
+    currentLang = lang;
+
+    document.getElementById("btnLangEn").classList.toggle("active", lang === 'en');
+    document.getElementById("btnLangEs").classList.toggle("active", lang === 'es');
+    document.documentElement.lang = lang;
+
+    const t = I18N[lang];
+    const map = {
+        txtHeaderSubtitle: t.headerSubtitle,
+        txtLeadBadge: t.leadBadge,
+        txtHeroTag: t.heroTag,
+        txtHeroTitle: t.heroTitle,
+        txtHeroDesc: t.heroDesc,
+        txtNavShipping: t.navShipping,
+        txtNavTotals: t.navTotals,
+        txtNavStatues: t.navStatues,
+        txtCollabStepTitle: t.collabStepTitle,
+        txtCollabStepDesc: t.collabStepDesc,
+        txtLiveStatus: t.liveStatus,
+        txtInventoryTitle: t.inventoryTitle,
+        txtInventorySub: t.inventorySub,
+        txtBadgeBigQty: t.badgeBigQty,
+        txtSeriesBig: t.seriesBig,
+        txtSubBig: t.subBig,
+        txtSpecBigHeight: t.specBigHeight,
+        txtSpecBigWeight: t.specBigWeight,
+        txtSpecBigArms: t.specBigArms,
+        txtSpecBigNumbered: t.specBigNumbered,
+        txtBadgeSmallQty: t.badgeSmallQty,
+        txtSeriesSmall: t.seriesSmall,
+        txtSubSmall: t.subSmall,
+        txtSpecSmallHeight: t.specSmallHeight,
+        txtSpecSmallWeight: t.specSmallWeight,
+        txtSpecSmallResin: t.specSmallResin,
+        txtSpecSmallBox: t.specSmallBox,
+        txtCatalogMSRP1: t.catalogMSRP,
+        txtCatalogMSRP2: t.catalogMSRP,
+        txtCatalogUsd1: t.catalogUsd,
+        txtCatalogUsd2: t.catalogUsd,
+        txtSimHeaderTitle: t.simHeaderTitle,
+        txtSimHeaderSub: t.simHeaderSub,
+        txtPresetHeading: t.presetHeading,
+        txtPresetSub: t.presetSub,
+        txtSellerIncentiveLabel: t.sellerIncentiveLabel,
+        txtShipBigLabel: t.shipBigLabel,
+        txtShipSmallLabel: t.shipSmallLabel,
+        txtTariffLabel: t.tariffLabel,
+        txtExchangeLabel: t.exchangeLabel,
+        txtFacilitationLabel: t.facilitationLabel,
+        txtHeaderBigSub: t.headerBigSub,
+        txtHeaderSmallSub: t.headerSmallSub,
+        txtRowCatalogBase1: t.rowCatalogBase,
+        txtRowCatalogBase2: t.rowCatalogBase,
+        txtRowExWarehouse1: t.rowExWarehouse,
+        txtRowExWarehouse2: t.rowExWarehouse,
+        txtRowShipping1: t.rowShipping,
+        txtRowShipping2: t.rowShipping,
+        txtRowDuty1: t.rowDuty,
+        txtRowDuty2: t.rowDuty,
+        txtRowLanded1: t.rowLanded,
+        txtRowLanded2: t.rowLanded,
+        txtRowSellerNet1: t.rowSellerNet,
+        txtRowSellerNet2: t.rowSellerNet,
+        txtSynergySellerHeader: t.synergySellerHeader,
+        txtSynergySellerTag: t.synergySellerTag,
+        txtSynergySeller1: t.synergySeller1,
+        txtSynergySeller2: t.synergySeller2,
+        txtSynergySeller3: t.synergySeller3,
+        txtSynergyCommunityHeader: t.synergyCommunityHeader,
+        txtSynergyCommunityTag: t.synergyCommunityTag,
+        txtSynergyComm1: t.synergyComm1,
+        txtSynergyComm2: t.synergyComm2,
+        txtSynergyComm3: t.synergyComm3,
+        campaignTitle: t.campaignTitle,
+        campaignSub: t.campaignSub,
+        txtMetricDeliveredVolume: t.metricDeliveredVolume,
+        txtMetricLogistics: t.metricLogistics,
+        txtMetricSellerNet: t.metricSellerNet,
+        txtMetricCommunityPool: t.metricCommunityPool,
+        txtMemoNoticeTitle: t.memoNoticeTitle,
+        txtMemoNoticeSub: t.memoNoticeSub,
+        txtCopyMemoBtn: t.copyMemoBtn,
+        toastCopy: t.toastCopied,
+        txtStickySub: t.stickySub,
+        txtStickyAction: t.stickyAction,
+        txtFooter1: t.footer1,
+        txtFooter2: t.footer2
+    };
+
+    for (const [id, val] of Object.entries(map)) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    }
+
+    updateCalculations();
+}
+
+function copyCollaborativeMemo() {
+    const bigLanded = document.getElementById("bigLandedPrice").textContent;
+    const smallLanded = document.getElementById("smallLandedPrice").textContent;
+    const bigShip = document.getElementById("bigShippingDisplay").textContent;
+    const smallShip = document.getElementById("smallShippingDisplay").textContent;
+    const sellerNet = document.getElementById("metricSellerNetTotal").textContent;
+    const totalVolume = document.getElementById("metricDeliveredTotal").textContent;
+
+    let memo = "";
+    if (currentLang === 'en') {
+        memo = 
+`Hi! Following up on our conversation regarding the 4 big MS/01 and 6 small MMS/01 statues:
+
+I put together a quick Landed Cost & Campaign scenario based on the shipping estimates we discussed so we can gauge collector interest with clear numbers:
+
+TARGET DELIVERED / LANDED PRICING:
+• Voltes V Legacy MS/01 (51 cm / 9.5 kg): ${bigLanded} (incl. est. freight ~${bigShip})
+• Voltes V Legacy MMS/01 (20 cm / 0.8 kg): ${smallLanded} (incl. est. freight ~${smallShip})
+
+CAMPAIGN OUTCOME FOR ALL 10 UNITS:
+• Gross Order Value Delivered: ${totalVolume}
+• Net Liquidation Inflow to You: ${sellerNet}
+
+NEXT STEPS:
+1. Once you confirm your exact DHL/FedEx account shipping rates, we lock in these final landed prices.
+2. I will prepare an exclusive showcase post inside our Facebook collector group to gather confirmed pre-orders.
+3. You handle customer billing and direct dispatch, and we clear the remaining 10 units smoothly!
+
+Let me know what you think of these price points!`;
+    } else {
+        memo = 
+`¡Hola! Dando seguimiento a nuestra conversación sobre las 4 estatuas grandes MS/01 y las 6 pequeñas MMS/01:
+
+Preparé un escenario de Costo Puesto en Destino (Landed Cost) basado en los estimados de envío que conversamos para poder medir el interés de los coleccionistas con números claros:
+
+PRECIOS OBJETIVO ENTREGADOS EN DESTINO (LANDED):
+• Voltes V Legacy MS/01 (51 cm / 9.5 kg): ${bigLanded} (incl. flete est. ~${bigShip})
+• Voltes V Legacy MMS/01 (20 cm / 0.8 kg): ${smallLanded} (incl. flete est. ~${smallShip})
+
+RESULTADO DE LA CAMPAÑA (LAS 10 PIEZAS):
+• Volumen Bruto de Pedidos Entregados: ${totalVolume}
+• Ingreso Neto Liquidado para Ti: ${sellerNet}
+
+PRÓXIMOS PASOS:
+1. En cuanto me confirmes las tarifas de envío con tu cuenta DHL/FedEx, cerramos los precios finales.
+2. Preparo una publicación exclusiva en nuestro grupo de Facebook para reunir los pedidos confirmados.
+3. Tú gestionas la facturación y el despacho directo, liquidando las 10 unidades remanentes de forma limpia.
+
+¡Quedo atento a tus comentarios sobre estos números!`;
+    }
+
+    const buffer = document.getElementById("clipboardBuffer");
+    buffer.value = memo;
+    buffer.select();
+
+    try {
+        document.execCommand('copy');
+        const toast = document.getElementById("toastCopy");
+        toast.style.display = "inline";
+        setTimeout(() => {
+            toast.style.display = "none";
+        }, 3500);
+    } catch (err) {
+        console.error("Copy failed", err);
+    }
+}
+
+[
+    "sellerDiscount",
+    "shipBig",
+    "shipSmall",
+    "tariffRate",
+    "exchange",
+    "feePercent"
+].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener("input", updateCalculations);
+    }
+});
+
+function initApp() {
+    setLanguage('en');
+    applyRegionPreset('US');
+    updateCalculations();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
+</script>
+
+</body>
+</html>
